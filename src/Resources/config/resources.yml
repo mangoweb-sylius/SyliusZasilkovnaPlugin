@@ -1,0 +1,14 @@
+sylius_resource:
+    resources:
+        mango_zasilkovna_plugin.zasilkovna:
+            driver: doctrine/orm
+            classes:
+                model: MangoSylius\SyliusZasilkovnaPlugin\Entity\Zasilkovna
+                repository: MangoSylius\SyliusZasilkovnaPlugin\Repository\ZasilkovnaRepository
+
+        mango_zasilkovna_plugin.zasilkovna_config:
+            driver: doctrine/orm
+            classes:
+                model: MangoSylius\SyliusZasilkovnaPlugin\Entity\ZasilkovnaConfig
+                repository: MangoSylius\SyliusZasilkovnaPlugin\Repository\ZasilkovnaConfigRepository
+                form: MangoSylius\SyliusZasilkovnaPlugin\Form\Type\ZasilkovnaConfigType

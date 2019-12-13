@@ -1,0 +1,68 @@
+parameters:
+    zasilkovnaApiUrl: 'http://www.zasilkovna.cz/api/v3/'
+    shippingMethodsCodes: ['zasilkovna']
+
+services:
+    _defaults:
+        autowire: false
+        autoconfigure: false
+        public: false
+
+    MangoSylius\SyliusZasilkovnaPlugin\Controller\SyncBranches:
+        public: true
+        arguments:
+            $router: '@router'
+            $flashBag: '@session.flash_bag'
+            $translator: '@translator'
+            $shippingMethodRepository: '@sylius.repository.shipping_method'
+            $zasilkovnaApiFactory: '@MangoSylius\SyliusZasilkovnaPlugin\Factory\ZasilkovnaApiFactory'
+
+    MangoSylius\SyliusZasilkovnaPlugin\Command\SyncZasilkovnaCommand:
+        tags:
+            - name: 'console.command'
+        arguments:
+            $zasilkovnaApiFactory: '@MangoSylius\SyliusZasilkovnaPlugin\Factory\ZasilkovnaApiFactory'
+
+    MangoSylius\SyliusZasilkovnaPlugin\Model\Api\ZasilkovnaApiInterface:
+        factory: MangoSylius\SyliusZasilkovnaPlugin\Factory\ZasilkovnaApiFactory:getZasilkovnaApi
+
+    MangoSylius\SyliusZasilkovnaPlugin\Factory\ZasilkovnaApiFactory:
+        arguments:
+            $downloader: '@MangoSylius\SyliusZasilkovnaPlugin\Model\Api\JsonDownloader'
+            $entityManager: '@doctrine.orm.entity_manager'
+            $zasilkovnaRepository: '@mango_zasilkovna_plugin.repository.zasilkovna'
+            $zasilkovnaConfigRepository: '@mango_zasilkovna_plugin.repository.zasilkovna_config'
+            $apiUrl: '%zasilkovnaApiUrl%'
+
+    MangoSylius\SyliusZasilkovnaPlugin\Model\Api\JsonDownloader: ~
+
+    MangoSylius\SyliusZasilkovnaPlugin\Form\Extension\ShipmentZasilkovnaExtension:
+        arguments:
+            - '@sylius.repository.zone'
+            - '@sylius.shipping_methods_resolver'
+            - '@sylius.repository.shipping_method'
+            - '@mango_zasilkovna_plugin.repository.zasilkovna'
+        tags:
+            - name: form.type_extension
+              extended_type: Sylius\Bundle\CoreBundle\Form\Type\Checkout\ShipmentType
+
+    MangoSylius\SyliusZasilkovnaPlugin\Form\Extension\AdminZasilkovnaShippingMethodExtension:
+        tags:
+            - name: form.type_extension
+              extended_type: Sylius\Bundle\ShippingBundle\Form\Type\ShippingMethodType
+
+    MangoSylius\SyliusZasilkovnaPlugin\Form\Type\ZasilkovnaConfigType:
+        tags:
+            - name: form.type
+        arguments:
+            $dataClass: MangoSylius\SyliusZasilkovnaPlugin\Entity\ZasilkovnaConfig
+            $validationGroups: ['sylius']
+
+    MangoSylius\SyliusZasilkovnaPlugin\Model\ZasilkovnaShipmentExporter:
+        public: true
+        arguments:
+            $shippingMethodsCodes: '%shippingMethodsCodes%'
+        tags:
+            - name: mango_sylius.shipment_exporter_type
+              type: 'zasilkovna'
+              label: 'Zásilkovna'

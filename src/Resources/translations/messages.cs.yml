@@ -1,0 +1,7 @@
+mangoweb:
+    shop:
+        checkout:
+            complete:
+                zasilkovnaBrach: Zásilkovna
+            shippingStep:
+                chooseZasilkovnaBranch: Vyberte pobočku zásilkovny

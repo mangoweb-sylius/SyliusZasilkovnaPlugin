@@ -1,0 +1,6 @@
+parameters:
+    zasilkovnaApiUrl: '%kernel.root_dir%/../Behat/Resources/'
+
+imports:
+    - { resource: "../../Behat/Resources/services.xml" }
+    - { resource: "../../../vendor/sylius/sylius/src/Sylius/Behat/Resources/config/services.xml" }

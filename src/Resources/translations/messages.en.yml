@@ -1,0 +1,17 @@
+mangoweb:
+    shop:
+        checkout:
+            complete:
+                zasilkovnaBrach: Zásilkovna branch
+            shippingStep:
+                chooseZasilkovnaBranch: Choose Zásilkovna Branch
+    admin:
+        zasilkovna:
+            success:
+                import: Zásilkovna branches synchronization was successful.
+            form:
+                apiKey: Zásilkovna api key
+                syncAction: Sync Zásilkovna branches
+            export:
+                toZasilkovnaBranch: Zásilkovna Branch
+                toAddress: To address

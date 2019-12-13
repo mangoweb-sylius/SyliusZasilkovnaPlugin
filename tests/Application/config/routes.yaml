@@ -1,0 +1,7 @@
+mango_sylius_zasilkovna_plugin:
+    resource: '@MangoSyliusZasilkovnaPlugin/Resources/config/routing.yml'
+    prefix: /admin
+
+mango_sylius_shipment_export_plugin:
+    resource: "@MangoSyliusShipmentExportPlugin/Resources/config/routing.yml"
+    prefix: /admin
