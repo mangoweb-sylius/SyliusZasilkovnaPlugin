@@ -9,6 +9,7 @@ use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
+use Sylius\Component\Currency\Converter\CurrencyConverter;
 
 class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 {
@@ -17,10 +18,22 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 	 */
 	private $shippingMethodsCodes;
 
+	/**
+	 * @var CurrencyConverter
+	 */
+	private $currencyConverter;
+
 	public function __construct(
+		CurrencyConverter $currencyConverter,
 		array $shippingMethodsCodes
 	) {
 		$this->shippingMethodsCodes = $shippingMethodsCodes;
+		$this->currencyConverter = $currencyConverter;
+	}
+
+	private function convert(int $amount, string $sourceCurrencyCode, string $targetCurrencyCode): int
+	{
+		return $this->currencyConverter->convert($amount, $sourceCurrencyCode, $targetCurrencyCode);
 	}
 
 	public function getShippingMethodsCodes(): array
@@ -53,12 +66,35 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 
 		$currencyCode = $order->getCurrencyCode();
 		assert($currencyCode !== null);
-		$totalAmount = number_format(
-			$order->getTotal() / 100,
-			0,
-			',',
-			''
-		);
+
+		$decimals = 0;
+		if ($shipment->getZasilkovna() !== null && $shipment->getZasilkovna()->getCurrency() !== null) {
+			$totalAmount = $this->convert($order->getTotal(), $shipment->getZasilkovna()->getCurrency(), $shipment->getZasilkovna()->getCurrency());
+		} else {
+			if ($address->getCountryCode() === 'CZ') {
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'CZK');
+			} elseif ($address->getCountryCode() === 'SK') {
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'EUR');
+				$decimals = 2;
+			} elseif ($address->getCountryCode() === 'PL') {
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'PLN');
+			} elseif ($address->getCountryCode() === 'HU') {
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'HUF');
+			} elseif ($address->getCountryCode() === 'RO') {
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'RON');
+			} else {
+				$totalAmount = null;
+			}
+		}
+
+		if ($totalAmount !== null) {
+			$totalAmount = number_format(
+				$totalAmount / 100,
+				$decimals,
+				'.',
+				''
+			);
+		}
 
 		$weight = 0;
 		foreach ($order->getItems() as $item) {
@@ -109,7 +145,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 			$zasilkovnaId ?? '',
 
 			/* 13 - Doména e-shopu*** */
-			$channel->getHostname(),
+			'',
 
 			/* 14 - Obsah 18+ */
 			'',
@@ -139,5 +175,13 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 	public function getQuestionsArray(): ?array
 	{
 		return null;
+	}
+
+	public function getHeaders(): ?array
+	{
+		return [
+			['version 5'],
+			[''],
+		];
 	}
 }
