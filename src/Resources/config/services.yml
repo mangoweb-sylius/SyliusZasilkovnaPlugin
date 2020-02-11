@@ -61,6 +61,7 @@ services:
     MangoSylius\SyliusZasilkovnaPlugin\Model\ZasilkovnaShipmentExporter:
         public: true
         arguments:
+            $currencyConverter: '@sylius.currency_converter'
             $shippingMethodsCodes: '%shippingMethodsCodes%'
         tags:
             - name: mango_sylius.shipment_exporter_type

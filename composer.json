@@ -7,7 +7,7 @@
 		"ext-json": "*",
 		"php": "^7.1",
 		"sylius/sylius": "^1.5",
-		"mangoweb-sylius/sylius-shipment-export-plugin": "0.3.*"
+		"mangoweb-sylius/sylius-shipment-export-plugin": "^0.4.0"
 	},
 	"require-dev": {
 		"behat/behat": "^3.4",
