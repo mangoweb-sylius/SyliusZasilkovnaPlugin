@@ -67,21 +67,28 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 		$currencyCode = $order->getCurrencyCode();
 		assert($currencyCode !== null);
 
+		$targetCurrencyCode = null;
 		$decimals = 0;
 		if ($shipment->getZasilkovna() !== null && $shipment->getZasilkovna()->getCurrency() !== null) {
-			$totalAmount = $this->convert($order->getTotal(), $shipment->getZasilkovna()->getCurrency(), $shipment->getZasilkovna()->getCurrency());
+			$targetCurrencyCode = $shipment->getZasilkovna()->getCurrency();
+			$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
 		} else {
 			if ($address->getCountryCode() === 'CZ') {
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'CZK');
+				$targetCurrencyCode = 'CZK';
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
 			} elseif ($address->getCountryCode() === 'SK') {
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'EUR');
+				$targetCurrencyCode = 'EUR';
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
 				$decimals = 2;
 			} elseif ($address->getCountryCode() === 'PL') {
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'PLN');
+				$targetCurrencyCode = 'PLN';
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
 			} elseif ($address->getCountryCode() === 'HU') {
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'HUF');
+				$targetCurrencyCode = 'HUF';
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
 			} elseif ($address->getCountryCode() === 'RO') {
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, 'RON');
+				$targetCurrencyCode = 'RON';
+				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
 			} else {
 				$totalAmount = null;
 			}
@@ -133,7 +140,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 			$isCashOnDelivery ? $totalAmount : '',
 
 			/* 9 - Měna */
-			$currencyCode,
+			$targetCurrencyCode,
 
 			/* 10 - Hodnota **/
 			$totalAmount,
