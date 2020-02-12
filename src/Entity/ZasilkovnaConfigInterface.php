@@ -13,4 +13,12 @@ interface ZasilkovnaConfigInterface
 	public function getApiKey(): ?String;
 
 	public function setApiKey(?String $apiKey): void;
+
+	public function getSenderLabel(): ?string;
+
+	public function setSenderLabel(?string $senderLabel): void;
+
+	public function getCarrierPickupPoint(): ?string;
+
+	public function setCarrierPickupPoint(?string $carrierPickupPoint): void;
 }
