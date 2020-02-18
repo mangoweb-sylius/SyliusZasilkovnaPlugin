@@ -10,11 +10,9 @@
 				{{ form_row(form.position) }}
 			</div>
 			{{ form_row(form.enabled) }}
-
-			{{ include('MangoSyliusZasilkovnaPlugin:Admin/ShippingMethod:_zasilkovnaForm.html.twig') }}
-
 			<h4 class="ui dividing header">{{ 'sylius.ui.availability'|trans }}</h4>
 			{{ form_row(form.channels) }}
+			{{ include('MangoSyliusZasilkovnaPlugin:Admin/ShippingMethod:_zasilkovnaForm.html.twig') }}
 			<h4 class="ui dividing header">{{ 'sylius.ui.category_requirements'|trans }}</h4>
 			{{ form_row(form.category) }}
 			{% for categoryRequirementChoiceForm in form.categoryRequirement %}

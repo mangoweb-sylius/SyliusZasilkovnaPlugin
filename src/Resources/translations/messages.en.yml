@@ -7,10 +7,13 @@ mangoweb:
                 chooseZasilkovnaBranch: Choose Zásilkovna Branch
     admin:
         zasilkovna:
+            title: Zásilkovna
             success:
                 import: Zásilkovna branches synchronization was successful.
             form:
                 apiKey: Zásilkovna api key
+                senderLabel: Sender label
+                carrierPickupPoint: Carrier pickup point
                 syncAction: Sync Zásilkovna branches
             export:
                 toZasilkovnaBranch: Zásilkovna Branch

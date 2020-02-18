@@ -13,6 +13,8 @@ interface UpdatePageInterface extends BaseUpdatePageInterface
 
 	public function changeApiKey(?string $apiKey): void;
 
+	public function changeInput(string $elementName, ?string $value): void;
+
 	public function zasilkovnaDownloadButtonIsOnPage(): NodeElement;
 
 	public function clickToZasilkovnaDownloadButton(): void;

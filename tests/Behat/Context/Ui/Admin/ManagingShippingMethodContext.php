@@ -31,6 +31,38 @@ final class ManagingShippingMethodContext implements Context
 	}
 
 	/**
+	 * @When I change Zásilkovna Sender label to :arg1
+	 */
+	public function iChangeZasilkovnaSenderLabelTo($arg1)
+	{
+		$this->updatePage->changeInput('senderLabel', $arg1);
+	}
+
+	/**
+	 * @Then the Zásilkovna Sender label for this shipping method should be :arg1
+	 */
+	public function theZasilkovnaSenderLabelForThisShippingMethodShouldBe($arg1)
+	{
+		Assert::eq($this->updatePage->isSingleResourceOnPage('senderLabel'), $arg1);
+	}
+
+	/**
+	 * @When I change Zásilkovna Carrier pickup point to :arg1
+	 */
+	public function iChangeZasilkovnaCarrierPickupPointTo($arg1)
+	{
+		$this->updatePage->changeInput('carrierPickupPoint', $arg1);
+	}
+
+	/**
+	 * @Then the Zásilkovna Carrier pickup point for this shipping method should be :arg1
+	 */
+	public function theZasilkovnaCarrierPickupPointForThisShippingMethodShouldBe($arg1)
+	{
+		Assert::eq($this->updatePage->isSingleResourceOnPage('carrierPickupPoint'), $arg1);
+	}
+
+	/**
 	 * @When I change Zásilkovna api key to :apiKey
 	 */
 	public function iChangeZasilkovnaApiKeyTo(string $apiKey)

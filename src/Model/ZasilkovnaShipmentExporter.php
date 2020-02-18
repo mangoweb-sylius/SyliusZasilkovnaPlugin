@@ -55,7 +55,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 		assert($customer !== null);
 
 		$shippingMethod = $shipment->getMethod();
-		assert($shippingMethod !== null);
+		assert($shippingMethod instanceof ZasilkovnaShippingMethodInterface);
 		$payment = $order->getPayments()->first();
 		assert($payment instanceof PaymentInterface);
 		$paymentMethod = $payment->getMethod();
@@ -113,6 +113,8 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 		}
 
 		$zasilkovnaId = $shipment->getZasilkovna() !== null ? $shipment->getZasilkovna()->getId() : null;
+		$carrierPickupPoint = $shippingMethod->getZasilkovnaConfig() !== null ? $shippingMethod->getZasilkovnaConfig()->getCarrierPickupPoint() : null;
+		$senderLabel = $shippingMethod->getZasilkovnaConfig() !== null ? $shippingMethod->getZasilkovnaConfig()->getSenderLabel() : null;
 
 		return [
 			/* 1 - version 5 */
@@ -152,7 +154,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 			$zasilkovnaId ?? '',
 
 			/* 13 - Doména e-shopu*** */
-			'',
+			$senderLabel,
 
 			/* 14 - Obsah 18+ */
 			'',
@@ -171,6 +173,9 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 
 			/* 19 - PSČ */
 			$zasilkovnaId ? '' : $address->getPostcode(),
+
+			/* 20 - Unique ID of the carrier pickup point */
+			$carrierPickupPoint,
 		];
 	}
 

@@ -186,6 +186,8 @@ For the guide how to use your own entity see [Sylius docs - Customizing Models](
   ```bash
   mango:zasilkovna:sync
   ```
+* Packeta API documentation: https://docs.packetery.com/03-creating-packets/01-csv-import.html
+
 
 ## Development
 

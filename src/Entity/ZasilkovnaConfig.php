@@ -27,6 +27,18 @@ class ZasilkovnaConfig implements ResourceInterface, ZasilkovnaConfigInterface
 	 */
 	protected $apiKey;
 
+	/**
+	 * @var string|null
+	 * @ORM\Column(nullable=true, type="string")
+	 */
+	private $senderLabel;
+
+	/**
+	 * @var string|null
+	 * @ORM\Column(nullable=true, type="string")
+	 */
+	private $carrierPickupPoint;
+
 	public function getId(): ?int
 	{
 		return $this->id;
@@ -45,5 +57,25 @@ class ZasilkovnaConfig implements ResourceInterface, ZasilkovnaConfigInterface
 	public function setApiKey(?String $apiKey): void
 	{
 		$this->apiKey = $apiKey;
+	}
+
+	public function getSenderLabel(): ?string
+	{
+		return $this->senderLabel;
+	}
+
+	public function setSenderLabel(?string $senderLabel): void
+	{
+		$this->senderLabel = $senderLabel;
+	}
+
+	public function getCarrierPickupPoint(): ?string
+	{
+		return $this->carrierPickupPoint;
+	}
+
+	public function setCarrierPickupPoint(?string $carrierPickupPoint): void
+	{
+		$this->carrierPickupPoint = $carrierPickupPoint;
 	}
 }
