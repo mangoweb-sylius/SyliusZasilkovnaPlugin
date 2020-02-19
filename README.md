@@ -67,10 +67,6 @@
 1. Add routing to `config/_routes.yaml`
 
     ```yaml
-    mango_sylius_zasilkovna_plugin:
-        resource: '@MangoSyliusZasilkovnaPlugin/Resources/config/routing.yml'
-        prefix: /admin
-   
     mango_sylius_shipment_export_plugin:
         resource: '@MangoSyliusShipmentExportPlugin/Resources/config/routing.yml'
         prefix: /admin
@@ -152,7 +148,13 @@
    
    {% block address %}
    	{% if row.zasilkovna %}
-   		{{ 'mangoweb.admin.zasilkovna.export.toZasilkovnaBranch'|trans }}: {{ row.zasilkovna }}
+   		Zásilkovna:
+        {{ row.zasilkovna['place'] is defined ? row.zasilkovna['place'] }},
+        {% if row.zasilkovna['nameStreet'] is defined %}
+        	{{ row.zasilkovna['nameStreet'] }}
+        {% elseif row.zasilkovna['name'] is defined %}
+        	{{ row.zasilkovna['name'] }}
+        {% endif %}
    	{% else %}
    		{{ 'mangoweb.admin.zasilkovna.export.toAddress'|trans }}:
    		{% if row.order.shippingAddress.company %}

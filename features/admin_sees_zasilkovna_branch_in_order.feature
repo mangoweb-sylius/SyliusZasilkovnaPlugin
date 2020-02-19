@@ -10,7 +10,6 @@ Feature: Admin can see Zásilkovna branch in order detail in admin panel
 		And the store ships everywhere for free
 		And the store also allows shipping with "Zasilkovna" identified by "Zasilkovna"
 		And this shipping method has Zásilkovna api key
-		And the store has Zásilkovna "ZasilkovnaCZ" with ID "1"
 		And the store allows paying with "Cash on Delivery"
 
 	@ui
@@ -35,7 +34,7 @@ Feature: Admin can see Zásilkovna branch in order detail in admin panel
 		And the customer "Lucifer Morningstar" addressed it to "Seaside Fwy", "90802" "Los Angeles" in the "United States"
 		And for the billing address of "Mazikeen Lilim" in the "Pacific Coast Hwy", "90806" "Los Angeles", "United States"
 		And the customer chose "Zasilkovna" shipping method with "Cash on Delivery" payment
-		And choose Zásilkovna branch "ZasilkovnaCZ"
+		And choose Zásilkovna branch "Zasilkovna"
 		And I am logged in as an administrator
 		When I view the summary of the order "#00000666"
 		Then it should have been placed by the customer "lucy@teamlucifer.com"

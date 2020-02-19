@@ -1,10 +1,32 @@
 {% if form.parent.parent['zasilkovna_' ~ method.code] is defined and form.parent.parent['zasilkovna_' ~ method.code] %}
-	<div class="methodOption zasilkovnaSelectDiv">
-		{{ form_widget(form.parent.parent['zasilkovna_' ~ method.code]) }}
+	{% set inputId = form.parent.parent['zasilkovna_' ~ method.code].vars.id %}
+	{% set labelId = inputId ~ '_title' %}
+
+	{% set zasilkovnaOptions = '{}' %}
+	{% if form.parent.parent['zasilkovna_' ~ method.code].vars.attr['data-country'] is defined and  form.parent.parent['zasilkovna_' ~ method.code].vars.attr['data-country'] is not empty %}
+		{% set zasilkovnaOptions = '{country: \'' ~ form.parent.parent['zasilkovna_' ~ method.code].vars.attr['data-country'] ~ '\'}' %}
+	{% endif %}
+
+	<div class="ui hidden divider"></div>
+	<div class="center aligned ui grid">
+		<button type="button"
+				id="{{ labelId }}"
+				class="ui secondary basic button"
+				onclick="Packeta.Widget.pick(
+					'{{ form.parent.parent['zasilkovna_' ~ method.code].vars.attr['data-api-key'] }}',
+					showSelectedPickupPoint.bind(this, '{{ inputId }}', '{{ labelId }}'),
+				{{ zasilkovnaOptions }})"
+				value="">
+			{% if form.parent.parent['zasilkovna_' ~ method.code].vars.attr['data-label'] is defined and form.parent.parent['zasilkovna_' ~ method.code].vars.attr['data-label'] is not empty %}
+				{{ form.parent.parent['zasilkovna_' ~ method.code].vars.attr['data-label'] }}
+			{% else %}
+				{{ 'mangoweb.shop.checkout.shippingStep.chooseZasilkovnaBranch'|trans }}
+			{% endif %}
+		</button>
 	</div>
-	<div class="zasilkovnaSelectDiv">
-		{{ form_errors(form.parent.parent['zasilkovna_' ~ method.code]) }}
-	</div>
+	<div class="ui hidden divider"></div>
+
+	{{ form_widget(form.parent.parent['zasilkovna_' ~ method.code]) }}
 {% endif %}
 
 {{ form_widget(form.parent.parent.zasilkovna) }}

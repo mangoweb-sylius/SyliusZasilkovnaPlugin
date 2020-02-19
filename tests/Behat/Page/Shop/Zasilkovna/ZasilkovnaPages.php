@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\MangoSylius\SyliusZasilkovnaPlugin\Behat\Page\Shop\Zasilkovna;
 
-use MangoSylius\SyliusZasilkovnaPlugin\Entity\ZasilkovnaInterface;
 use Sylius\Behat\Page\Admin\Channel\UpdatePage as BaseUpdatePage;
 
 final class ZasilkovnaPages extends BaseUpdatePage implements ZasilkovnaPagesInterface
 {
-	public function selectZasilkovnaBranch(ZasilkovnaInterface $zasilkovna): void
+	public function selectZasilkovnaBranch(array $zasilkovna): void
 	{
-		$zasilkovnaSelect = $this->getElement('zasilkovna_select');
-		$zasilkovnaSelect->selectOption($zasilkovna->getId());
+		$zasilkovnaSelect = $this->getElement('zasilkovna_hidden_input');
+		$zasilkovnaSelect->setValue(json_encode($zasilkovna));
 	}
 
 	public function iSeeZasilkovnaBranchInsteadOfShippingAddress(): bool
@@ -25,7 +24,7 @@ final class ZasilkovnaPages extends BaseUpdatePage implements ZasilkovnaPagesInt
 	protected function getDefinedElements(): array
 	{
 		return array_merge(parent::getDefinedElements(), [
-			'zasilkovna_select' => '.zasilkovnaSelectDiv select',
+			'zasilkovna_hidden_input' => 'input[type="hidden"][name^="sylius_checkout_select_shipping[shipments][0][zasilkovna_"]',
 			'shippingAddress' => '#sylius-shipping-address',
 		]);
 	}

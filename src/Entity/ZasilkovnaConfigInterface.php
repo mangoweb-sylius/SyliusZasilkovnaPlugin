@@ -21,4 +21,8 @@ interface ZasilkovnaConfigInterface
 	public function getCarrierPickupPoint(): ?string;
 
 	public function setCarrierPickupPoint(?string $carrierPickupPoint): void;
+
+	public function getOptionCountry(): ?string;
+
+	public function setOptionCountry(?string $optionCountry): void;
 }

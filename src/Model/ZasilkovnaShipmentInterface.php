@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace MangoSylius\SyliusZasilkovnaPlugin\Model;
 
-use MangoSylius\SyliusZasilkovnaPlugin\Entity\ZasilkovnaInterface;
-
 interface ZasilkovnaShipmentInterface
 {
-	public function getZasilkovna(): ?ZasilkovnaInterface;
+	public function getZasilkovna(): ?array;
 
-	public function setZasilkovna(?ZasilkovnaInterface $zasilkovna): void;
+	public function setZasilkovna(?array $zasilkovna): void;
 }

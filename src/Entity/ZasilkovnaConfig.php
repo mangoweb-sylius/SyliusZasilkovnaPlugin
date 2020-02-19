@@ -39,6 +39,12 @@ class ZasilkovnaConfig implements ResourceInterface, ZasilkovnaConfigInterface
 	 */
 	private $carrierPickupPoint;
 
+	/**
+	 * @var string|null
+	 * @ORM\Column(nullable=true, type="string")
+	 */
+	private $optionCountry;
+
 	public function getId(): ?int
 	{
 		return $this->id;
@@ -47,6 +53,16 @@ class ZasilkovnaConfig implements ResourceInterface, ZasilkovnaConfigInterface
 	public function setId(?int $id): void
 	{
 		$this->id = $id;
+	}
+
+	public function getOptionCountry(): ?string
+	{
+		return $this->optionCountry;
+	}
+
+	public function setOptionCountry(?string $optionCountry): void
+	{
+		$this->optionCountry = $optionCountry;
 	}
 
 	public function getApiKey(): ?String

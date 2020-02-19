@@ -11,6 +11,7 @@ mangoweb:
             success:
                 import: Zásilkovna branches synchronization was successful.
             form:
+                optionCountry: Show only shipping locations from that country
                 apiKey: Zásilkovna api key
                 senderLabel: Sender label
                 carrierPickupPoint: Carrier pickup point

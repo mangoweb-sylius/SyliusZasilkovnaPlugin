@@ -29,11 +29,6 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
 		return $this->getElement('zasilkovnaDownloadButton');
 	}
 
-	public function clickToZasilkovnaDownloadButton(): void
-	{
-		$this->getElement('zasilkovnaDownloadButton')->click();
-	}
-
 	public function iSeeZasilkovnaBranchInsteadOfShippingAddress(): bool
 	{
 		$shippingAddress = $this->getElement('shippingAddress')->getText();
@@ -47,7 +42,6 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
 			'apiKey' => '#sylius_shipping_method_zasilkovnaConfig_apiKey',
 			'senderLabel' => '#sylius_shipping_method_zasilkovnaConfig_senderLabel',
 			'carrierPickupPoint' => '#sylius_shipping_method_zasilkovnaConfig_carrierPickupPoint',
-			'zasilkovnaDownloadButton' => '#zasilkovnaDownloadButton',
 			'shippingAddress' => '#shipping-address',
 		]);
 	}
