@@ -23,10 +23,10 @@
 
 ## Features
 
- - Adds shipment type *Zásilkovna* [<a href="https://www.zasilkovna.cz">cz</a>] [<a href="https://www.przesylkownia.pl">pl</a>] [<a href="https://www.zasielkovna.sk">sk</a>] [<a href="https://www.csomagkuldo.hu">hu</a>] [<a href="https://www.coletaria.ro">ro</a>] branch which allows sending ordered products to selected Zásilkovna branch.
- - The user can choose the Zásilkovna branch during checkout in the Shipment step.
+ - Enables sending shipments via [<a href="https://www.zasilkovna.cz">cz</a>] [<a href="https://www.przesylkownia.pl">pl</a>] [<a href="https://www.zasielkovna.sk">sk</a>] [<a href="https://www.csomagkuldo.hu">hu</a>] [<a href="https://www.coletaria.ro">ro</a>] to Zasilkovna branch or to the customer's address via Zasilkovna service.
+ - The user can choose the Zásilkovna branch from the map during checkout in the Shipment step.
  - See Zásilkovna branch in final checkout step and also in the admin panel.
- - Export CSV with the Zásilkovna shipments and import it easily into Zásilkovna's system.
+ - Export CSV with the Zásilkovna shipments (both to Zasilkovna branch or customer's address) and import it easily into Zásilkovna's system.
 
 <p align="center">
 	<img src="https://raw.githubusercontent.com/mangoweb-sylius/SyliusZasilkovnaPlugin/master/doc/admin_order_detail.png"/>
@@ -175,12 +175,14 @@ For the guide how to use your own entity see [Sylius docs - Customizing Models](
 
 ## Usage
 
-* Create new shipping method in the admin panel and set `Zásilkovna api key`.
+* For delivery to the Zasilkovna branch, create new shipping method in the admin panel, set `Zásilkovna api key` and leave `Carrier ID` empty.
+* For delivery to customer's address, create new shipping method in the admin panel, set the `Carrier ID` and leave the `Zasilkovna API key` empty.
 * Zásilkovna CSV export will be generated for shipping method which has the code 'zasilkovna', you can change this in parameters, it is an array (therefore can contain more codes, e.g. if you need to have different prices for different countries, you will need more shipping methods; it is okay to use always the same API key) 
   ```yaml
   parameters:
       shippingMethodsCodes: ['zasilkovna']
   ```
+  You should add to this array both methods for shipping to Zasilkovna branch and also to customer's address via Zasilkovna service.
 * Packeta API documentation: https://docs.packetery.com/03-creating-packets/01-csv-import.html
 
 
