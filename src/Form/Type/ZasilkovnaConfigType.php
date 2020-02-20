@@ -44,8 +44,8 @@ final class ZasilkovnaConfigType extends AbstractResourceType
 				'label' => 'mangoweb.admin.zasilkovna.form.senderLabel',
 				'required' => false,
 			])
-			->add('carrierPickupPoint', TextType::class, [
-				'label' => 'mangoweb.admin.zasilkovna.form.carrierPickupPoint',
+			->add('carrierId', TextType::class, [
+				'label' => 'mangoweb.admin.zasilkovna.form.carrierId',
 				'required' => false,
 			])
 		;

@@ -126,7 +126,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 		}
 
 		$zasilkovnaId = $zasilkovna !== null && array_key_exists('id', $zasilkovna) ? $zasilkovna['id'] : null;
-		$carrierPickupPoint = $shippingMethod->getZasilkovnaConfig() !== null ? $shippingMethod->getZasilkovnaConfig()->getCarrierPickupPoint() : null;
+		$carrierId = $shippingMethod->getZasilkovnaConfig() !== null ? $shippingMethod->getZasilkovnaConfig()->getCarrierId() : null;
 		$senderLabel = $shippingMethod->getZasilkovnaConfig() !== null ? $shippingMethod->getZasilkovnaConfig()->getSenderLabel() : null;
 
 		return [
@@ -164,7 +164,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 			$weight,
 
 			/* 12 - Cílová pobočka* */
-			$zasilkovnaId ?? $carrierPickupPoint,
+			$zasilkovnaId ?? $carrierId,
 
 			/* 13 - Doména e-shopu*** */
 			$senderLabel,

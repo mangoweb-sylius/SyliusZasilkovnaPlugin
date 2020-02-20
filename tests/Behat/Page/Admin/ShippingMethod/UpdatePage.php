@@ -41,7 +41,7 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
 		return array_merge(parent::getDefinedElements(), [
 			'apiKey' => '#sylius_shipping_method_zasilkovnaConfig_apiKey',
 			'senderLabel' => '#sylius_shipping_method_zasilkovnaConfig_senderLabel',
-			'carrierPickupPoint' => '#sylius_shipping_method_zasilkovnaConfig_carrierPickupPoint',
+			'carrierId' => '#sylius_shipping_method_zasilkovnaConfig_carrierId',
 			'shippingAddress' => '#shipping-address',
 		]);
 	}

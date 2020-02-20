@@ -47,17 +47,17 @@ final class ManagingShippingMethodContext implements Context
 	/**
 	 * @When I change Zásilkovna Carrier pickup point to :arg1
 	 */
-	public function iChangeZasilkovnaCarrierPickupPointTo($arg1)
+	public function iChangeZasilkovnaCarrierIdTo($arg1)
 	{
-		$this->updatePage->changeInput('carrierPickupPoint', $arg1);
+		$this->updatePage->changeInput('carrierId', $arg1);
 	}
 
 	/**
 	 * @Then the Zásilkovna Carrier pickup point for this shipping method should be :arg1
 	 */
-	public function theZasilkovnaCarrierPickupPointForThisShippingMethodShouldBe($arg1)
+	public function theZasilkovnaCarrierIdForThisShippingMethodShouldBe($arg1)
 	{
-		Assert::eq($this->updatePage->isSingleResourceOnPage('carrierPickupPoint'), $arg1);
+		Assert::eq($this->updatePage->isSingleResourceOnPage('carrierId'), $arg1);
 	}
 
 	/**

@@ -14,7 +14,7 @@ mangoweb:
                 optionCountry: Show only shipping locations from that country
                 apiKey: Zásilkovna api key
                 senderLabel: Sender label
-                carrierPickupPoint: Carrier pickup point
+                carrierId: Carrier ID
                 syncAction: Sync Zásilkovna branches
             export:
                 toZasilkovnaBranch: Zásilkovna Branch
