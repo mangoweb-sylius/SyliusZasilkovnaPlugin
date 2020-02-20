@@ -164,7 +164,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 			$weight,
 
 			/* 12 - Cílová pobočka* */
-			$zasilkovnaId ?? '',
+			$zasilkovnaId ?? $carrierPickupPoint,
 
 			/* 13 - Doména e-shopu*** */
 			$senderLabel,
@@ -188,7 +188,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 			$zasilkovnaId ? '' : $address->getPostcode(),
 
 			/* 20 - Unique ID of the carrier pickup point */
-			$carrierPickupPoint,
+			'',
 		];
 	}
 
