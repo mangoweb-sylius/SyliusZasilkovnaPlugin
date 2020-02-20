@@ -4,4 +4,19 @@ mangoweb:
             complete:
                 zasilkovnaBrach: Zásilkovna
             shippingStep:
-                chooseZasilkovnaBranch: Vyberte pobočku zásilkovny
+                chooseZasilkovnaBranch: Vyberte výdejní místo Zásilkovny
+
+    admin:
+        zasilkovna:
+            title: Zásilkovna
+            success:
+                import: Zásilkovna branches synchronization was successful.
+            form:
+                optionCountry: Zobrazovat jen zásilkovny ze dané země
+                apiKey: Zásilkovna api key
+                senderLabel: Sender label
+                carrierId: Carrier ID
+                syncAction: Sync Zásilkovna branches
+            export:
+                toZasilkovnaBranch: Zásilkovna Branch
+                toAddress: To address

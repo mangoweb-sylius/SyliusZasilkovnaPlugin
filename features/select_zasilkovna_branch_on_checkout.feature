@@ -13,8 +13,6 @@ Feature: Select Zásilkovna branch in checkout
 		And the store has "DHL" shipping method with "$1.99" fee within the "EU" zone
 		And the store has "Zasilkovna" shipping method with "$0.99" fee within the "EU" zone
 		And this shipping method has Zásilkovna api key
-		And the store has Zásilkovna "ZasilkovnaCZ" with ID "1" and country code "CZ"
-		And the store has Zásilkovna "ZasilkovnaGB" with ID "2" and country code "GB"
 		And the store allows paying with "CSOB"
 		And I am a logged in customer
 
@@ -36,14 +34,6 @@ Feature: Select Zásilkovna branch in checkout
 		And I specified the shipping address as "Ankh Morpork", "Frost Alley", "90210", "Czechia" for "Jon Snow"
 		When I select "Zasilkovna" shipping method
 		Then I should not be able to go to the payment step again
-
-	@ui
-	Scenario: Available Zásilkovna branch according to the zone
-		Given I have product "PHP T-Shirt" in the cart
-		And I specified the shipping address as "Ankh Morpork", "Frost Alley", "90210", "Czechia" for "Jon Snow"
-		When I select "Zasilkovna" shipping method
-		Then I select "ZasilkovnaCZ" Zásilkovna branch
-		And I can not see "ZasilkovnaGB" Zásilkovna branch in the list of Zásilkovna branches
 
 	@ui
 	Scenario: Complete order with Zásilkovna shipping method

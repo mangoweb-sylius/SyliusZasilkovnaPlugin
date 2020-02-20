@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Tests\MangoSylius\SyliusZasilkovnaPlugin\Behat\Context\Ui\Admin;
 
 use Behat\Behat\Context\Context;
-use Behat\Mink\Exception\ElementNotFoundException;
-use Sylius\Behat\NotificationType;
 use Sylius\Behat\Service\NotificationCheckerInterface;
 use Tests\MangoSylius\SyliusZasilkovnaPlugin\Behat\Page\Admin\ShippingMethod\UpdatePageInterface;
 use Webmozart\Assert\Assert;
@@ -49,17 +47,17 @@ final class ManagingShippingMethodContext implements Context
 	/**
 	 * @When I change Zásilkovna Carrier pickup point to :arg1
 	 */
-	public function iChangeZasilkovnaCarrierPickupPointTo($arg1)
+	public function iChangeZasilkovnaCarrierIdTo($arg1)
 	{
-		$this->updatePage->changeInput('carrierPickupPoint', $arg1);
+		$this->updatePage->changeInput('carrierId', $arg1);
 	}
 
 	/**
 	 * @Then the Zásilkovna Carrier pickup point for this shipping method should be :arg1
 	 */
-	public function theZasilkovnaCarrierPickupPointForThisShippingMethodShouldBe($arg1)
+	public function theZasilkovnaCarrierIdForThisShippingMethodShouldBe($arg1)
 	{
-		Assert::eq($this->updatePage->isSingleResourceOnPage('carrierPickupPoint'), $arg1);
+		Assert::eq($this->updatePage->isSingleResourceOnPage('carrierId'), $arg1);
 	}
 
 	/**
@@ -76,40 +74,6 @@ final class ManagingShippingMethodContext implements Context
 	public function theZasilkovnaApiKeyForThisShippingMethodShouldBe(string $apiKey)
 	{
 		Assert::eq($this->updatePage->isSingleResourceOnPage('apiKey'), $apiKey);
-	}
-
-	/**
-	 * @Then action download and update zasilkovna branches is not available
-	 */
-	public function actionDownloadAndUpdateZasilkovnaBranchesIsDisabled()
-	{
-		Assert::throws(function () {
-			$this->updatePage->zasilkovnaDownloadButtonIsOnPage();
-		}, ElementNotFoundException::class);
-	}
-
-	/**
-	 * @Then action download and update zasilkovna branches is available
-	 */
-	public function actionDownloadAndUpdateZasilkovnaBranchesIsEnabled()
-	{
-		Assert::notNull($this->updatePage->zasilkovnaDownloadButtonIsOnPage());
-	}
-
-	/**
-	 * @Then click to action download and update zasilkovna branches
-	 */
-	public function clickToActionDownloadAndUpdateZasilkovnaBranches()
-	{
-		$this->updatePage->clickToZasilkovnaDownloadButton();
-	}
-
-	/**
-	 * @Then I should be notified that Zásilkovna branches has been successfully updated
-	 */
-	public function iShouldBeNotifiedThatZasilkovnaBranchesHasBeenSuccessfullyUpdated()
-	{
-		$this->notificationChecker->checkNotification('Zásilkovna branches synchronization was successful.', NotificationType::success());
 	}
 
 	/**

@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Tests\MangoSylius\SyliusZasilkovnaPlugin\Behat\Context\Ui\Shop;
 
 use Behat\Behat\Context\Context;
-use Behat\Mink\Exception\ElementNotFoundException;
 use FriendsOfBehat\PageObjectExtension\Page\UnexpectedPageException;
-use MangoSylius\SyliusZasilkovnaPlugin\Entity\ZasilkovnaInterface;
-use MangoSylius\SyliusZasilkovnaPlugin\Repository\ZasilkovnaRepositoryInterface;
 use Sylius\Behat\Context\Ui\Shop\Checkout\CheckoutShippingContext;
 use Tests\MangoSylius\SyliusZasilkovnaPlugin\Behat\Page\Shop\Zasilkovna\ZasilkovnaPagesInterface;
 use Webmozart\Assert\Assert;
@@ -23,19 +20,13 @@ final class ManagingZasilkovnaContext implements Context
 	 * @var CheckoutShippingContext
 	 */
 	private $checkoutShippingContext;
-	/**
-	 * @var ZasilkovnaRepositoryInterface
-	 */
-	private $zasilkovnaRepository;
 
 	public function __construct(
 		ZasilkovnaPagesInterface $zasilkovnaPages,
-		CheckoutShippingContext $checkoutShippingContext,
-		ZasilkovnaRepositoryInterface $zasilkovnaRepository
+		CheckoutShippingContext $checkoutShippingContext
 	) {
 		$this->zasilkovnaPages = $zasilkovnaPages;
 		$this->checkoutShippingContext = $checkoutShippingContext;
-		$this->zasilkovnaRepository = $zasilkovnaRepository;
 	}
 
 	/**
@@ -53,25 +44,7 @@ final class ManagingZasilkovnaContext implements Context
 	 */
 	public function iSelectZasilkovnaBranch(string $zasilkovnaName)
 	{
-		$zasilkovna = $this->zasilkovnaRepository->findOneBy(['name' => $zasilkovnaName]);
-
-		assert($zasilkovna instanceof ZasilkovnaInterface);
-
-		$this->zasilkovnaPages->selectZasilkovnaBranch($zasilkovna);
-	}
-
-	/**
-	 * @Then I can not see :zasilkovnaName Zásilkovna branch in the list of Zásilkovna branches
-	 */
-	public function iCanNotSeeZasilkovnaBranchInTheListOfZasilkovnaBranches(string $zasilkovnaName)
-	{
-		$zasilkovna = $this->zasilkovnaRepository->findOneBy(['name' => $zasilkovnaName]);
-
-		assert($zasilkovna instanceof ZasilkovnaInterface);
-
-		Assert::throws(function () use ($zasilkovna) {
-			$this->zasilkovnaPages->selectZasilkovnaBranch($zasilkovna);
-		}, ElementNotFoundException::class);
+		$this->zasilkovnaPages->selectZasilkovnaBranch(['id' => 1, 'place' => $zasilkovnaName]);
 	}
 
 	/**

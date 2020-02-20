@@ -22,7 +22,6 @@
 		<service id="sylius_zasilkovna_plugin.context.domain.command"
 				 class="Tests\MangoSylius\SyliusZasilkovnaPlugin\Behat\Context\Domain\CommandContext">
 			<argument type="service" id="kernel"/>
-			<argument type="service" id="mango_zasilkovna_plugin.repository.zasilkovna"/>
 			<argument type="service" id="doctrine.orm.entity_manager"/>
 		</service>
 
@@ -30,7 +29,6 @@
 				 class="Tests\MangoSylius\SyliusZasilkovnaPlugin\Behat\Context\Setup\ShippingMethodContext">
 			<argument type="service" id="doctrine.orm.entity_manager"/>
 			<argument type="service" id="sylius.behat.shared_storage"/>
-			<argument type="service" id="mango_zasilkovna_plugin.repository.zasilkovna"/>
 		</service>
 
 		<service id="sylius_zasilkovna_plugin.context.ui.shop.managing_zasilkovna_context"
@@ -38,7 +36,6 @@
 			<argument type="service"
 					  id="Tests\MangoSylius\SyliusZasilkovnaPlugin\Behat\Page\Shop\Zasilkovna\ZasilkovnaPagesInterface"/>
 			<argument type="service" id="sylius.behat.context.ui.shop.checkout.shipping"/>
-			<argument type="service" id="mango_zasilkovna_plugin.repository.zasilkovna"/>
 		</service>
 
 		<service id="Tests\MangoSylius\SyliusZasilkovnaPlugin\Behat\Page\Shop\Zasilkovna\ZasilkovnaPagesInterface"

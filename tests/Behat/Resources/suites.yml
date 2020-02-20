@@ -1,5 +1,4 @@
 imports:
     - suites/set_apikey_to_shipping_method.yml
-    - suites/update_zasilkovna_branches.yml
     - suites/admin_sees_zasilkovna_branch_in_order.yml
     - suites/select_zasilkovna_branch_on_checkout.yml

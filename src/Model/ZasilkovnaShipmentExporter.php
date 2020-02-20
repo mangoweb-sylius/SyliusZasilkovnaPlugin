@@ -67,30 +67,43 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 		$currencyCode = $order->getCurrencyCode();
 		assert($currencyCode !== null);
 
+		$zasilkovna = $shipment->getZasilkovna();
 		$targetCurrencyCode = null;
 		$decimals = 0;
-		if ($shipment->getZasilkovna() !== null && $shipment->getZasilkovna()->getCurrency() !== null) {
-			$targetCurrencyCode = $shipment->getZasilkovna()->getCurrency();
+		$totalAmount = '';
+		if ($zasilkovna !== null && array_key_exists('currency', $zasilkovna) && $zasilkovna['currency'] !== null) {
+			$targetCurrencyCode = $zasilkovna['currency'];
 			$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
-		} else {
-			if ($address->getCountryCode() === 'CZ') {
-				$targetCurrencyCode = 'CZK';
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
-			} elseif ($address->getCountryCode() === 'SK') {
-				$targetCurrencyCode = 'EUR';
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
-				$decimals = 2;
-			} elseif ($address->getCountryCode() === 'PL') {
-				$targetCurrencyCode = 'PLN';
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
-			} elseif ($address->getCountryCode() === 'HU') {
-				$targetCurrencyCode = 'HUF';
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
-			} elseif ($address->getCountryCode() === 'RO') {
-				$targetCurrencyCode = 'RON';
-				$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
+		}
+
+		if ($targetCurrencyCode === null) {
+			if ($zasilkovna !== null && array_key_exists('country', $zasilkovna)) {
+				$countryCode = $zasilkovna['country'];
 			} else {
-				$totalAmount = null;
+				$countryCode = $address->getCountryCode();
+			}
+
+			if ($countryCode !== null) {
+				$countryCode = strtoupper($countryCode);
+				if ($countryCode === 'CZ') {
+					$targetCurrencyCode = 'CZK';
+					$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
+				} elseif ($countryCode === 'SK') {
+					$targetCurrencyCode = 'EUR';
+					$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
+					$decimals = 2;
+				} elseif ($countryCode === 'PL') {
+					$targetCurrencyCode = 'PLN';
+					$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
+				} elseif ($countryCode === 'HU') {
+					$targetCurrencyCode = 'HUF';
+					$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
+				} elseif ($countryCode === 'RO') {
+					$targetCurrencyCode = 'RON';
+					$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
+				} else {
+					$totalAmount = null;
+				}
 			}
 		}
 
@@ -112,8 +125,8 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 			}
 		}
 
-		$zasilkovnaId = $shipment->getZasilkovna() !== null ? $shipment->getZasilkovna()->getId() : null;
-		$carrierPickupPoint = $shippingMethod->getZasilkovnaConfig() !== null ? $shippingMethod->getZasilkovnaConfig()->getCarrierPickupPoint() : null;
+		$zasilkovnaId = $zasilkovna !== null && array_key_exists('id', $zasilkovna) ? $zasilkovna['id'] : null;
+		$carrierId = $shippingMethod->getZasilkovnaConfig() !== null ? $shippingMethod->getZasilkovnaConfig()->getCarrierId() : null;
 		$senderLabel = $shippingMethod->getZasilkovnaConfig() !== null ? $shippingMethod->getZasilkovnaConfig()->getSenderLabel() : null;
 
 		return [
@@ -151,7 +164,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 			$weight,
 
 			/* 12 - Cílová pobočka* */
-			$zasilkovnaId ?? '',
+			$zasilkovnaId ?? $carrierId,
 
 			/* 13 - Doména e-shopu*** */
 			$senderLabel,
@@ -175,7 +188,7 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 			$zasilkovnaId ? '' : $address->getPostcode(),
 
 			/* 20 - Unique ID of the carrier pickup point */
-			$carrierPickupPoint,
+			'',
 		];
 	}
 

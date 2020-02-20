@@ -23,11 +23,10 @@
 
 ## Features
 
- - Adds shipment type *Zásilkovna* [<a href="https://www.zasilkovna.cz">cz</a>] [<a href="https://www.przesylkownia.pl">pl</a>] [<a href="https://www.zasielkovna.sk">sk</a>] [<a href="https://www.csomagkuldo.hu">hu</a>] [<a href="https://www.coletaria.ro">ro</a>] branch which allows sending ordered products to selected Zásilkovna branch.
- - The user can choose the Zásilkovna branch during checkout in the Shipment step.
- - Zásilkovna branches are displayed according to the zone of the shipment.
+ - Enables sending shipments via [<a href="https://www.zasilkovna.cz">cz</a>] [<a href="https://www.przesylkownia.pl">pl</a>] [<a href="https://www.zasielkovna.sk">sk</a>] [<a href="https://www.csomagkuldo.hu">hu</a>] [<a href="https://www.coletaria.ro">ro</a>] to Zasilkovna branch or to the customer's address via Zasilkovna service.
+ - The user can choose the Zásilkovna branch from the map during checkout in the Shipment step.
  - See Zásilkovna branch in final checkout step and also in the admin panel.
- - Export CSV with the Zásilkovna shipments and import it easily into Zásilkovna's system.
+ - Export CSV with the Zásilkovna shipments (both to Zasilkovna branch or customer's address) and import it easily into Zásilkovna's system.
 
 <p align="center">
 	<img src="https://raw.githubusercontent.com/mangoweb-sylius/SyliusZasilkovnaPlugin/master/doc/admin_order_detail.png"/>
@@ -67,10 +66,6 @@
 1. Add routing to `config/_routes.yaml`
 
     ```yaml
-    mango_sylius_zasilkovna_plugin:
-        resource: '@MangoSyliusZasilkovnaPlugin/Resources/config/routing.yml'
-        prefix: /admin
-   
     mango_sylius_shipment_export_plugin:
         resource: '@MangoSyliusShipmentExportPlugin/Resources/config/routing.yml'
         prefix: /admin
@@ -152,7 +147,13 @@
    
    {% block address %}
    	{% if row.zasilkovna %}
-   		{{ 'mangoweb.admin.zasilkovna.export.toZasilkovnaBranch'|trans }}: {{ row.zasilkovna }}
+   		Zásilkovna:
+        {{ row.zasilkovna['place'] is defined ? row.zasilkovna['place'] }},
+        {% if row.zasilkovna['nameStreet'] is defined %}
+        	{{ row.zasilkovna['nameStreet'] }}
+        {% elseif row.zasilkovna['name'] is defined %}
+        	{{ row.zasilkovna['name'] }}
+        {% endif %}
    	{% else %}
    		{{ 'mangoweb.admin.zasilkovna.export.toAddress'|trans }}:
    		{% if row.order.shippingAddress.company %}
@@ -174,18 +175,15 @@ For the guide how to use your own entity see [Sylius docs - Customizing Models](
 
 ## Usage
 
-* Create new shipping method in the admin panel and set `Zásilkovna api key`, save it and click `Sync Zásilkovna branches` button to load the list of branches into the current database.
+* For delivery to the Zasilkovna branch, create new shipping method in the admin panel, set `Zásilkovna api key` and leave `Carrier ID` empty.
+* For delivery to customer's address, create new shipping method in the admin panel, set the `Carrier ID` and leave the `Zasilkovna API key` empty.
+* If you need to filter the points in the map by country, use the `Show only pickup points from specific country in the map`. If you leave this blank, all points in all supported countries will be shown.
 * Zásilkovna CSV export will be generated for shipping method which has the code 'zasilkovna', you can change this in parameters, it is an array (therefore can contain more codes, e.g. if you need to have different prices for different countries, you will need more shipping methods; it is okay to use always the same API key) 
   ```yaml
   parameters:
       shippingMethodsCodes: ['zasilkovna']
   ```
-* You need to select the appripriate countries for the zone where Zásilkovna has some branches
-* Zásilkovna branches are updated on their servers daily between 0:00 - 1:00 CET. Just call this command (via `cron`) once a day, ideally during the night after 1:00. Details here: https://www.zasilkovna.cz/eshopy/implementace/xml
-
-  ```bash
-  mango:zasilkovna:sync
-  ```
+  You should add to this array both methods for shipping to Zasilkovna branch and also to customer's address via Zasilkovna service.
 * Packeta API documentation: https://docs.packetery.com/03-creating-packets/01-csv-import.html
 
 

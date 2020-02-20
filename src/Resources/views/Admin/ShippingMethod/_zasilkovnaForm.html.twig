@@ -1,11 +1,5 @@
 <h4 class="ui dividing header">{{ 'mangoweb.admin.zasilkovna.title'|trans }}</h4>
 {{ form_row(form.zasilkovnaConfig.apiKey) }}
+{{ form_row(form.zasilkovnaConfig.optionCountry) }}
 {{ form_row(form.zasilkovnaConfig.senderLabel) }}
-{{ form_row(form.zasilkovnaConfig.carrierPickupPoint) }}
-{% if resource and resource.id and resource.zasilkovnaConfig and resource.zasilkovnaConfig.apiKey %}
-	<a class="ui labeled icon primary button"
-	   href="{{ path('mango_sylius_zasilkovna_plugin_sync', {'id': resource.id}) }}" id="zasilkovnaDownloadButton">
-		<i class="sync icon"></i>
-		{{ 'mangoweb.admin.zasilkovna.form.syncAction'|trans }}
-	</a>
-{% endif %}
+{{ form_row(form.zasilkovnaConfig.carrierId) }}

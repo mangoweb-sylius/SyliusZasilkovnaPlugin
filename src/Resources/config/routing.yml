@@ -1,4 +1,0 @@
-mango_sylius_zasilkovna_plugin_sync:
-    path: /mango-sylius-zasilkovna-plugin-sync/{id}
-    defaults:
-        _controller: MangoSylius\SyliusZasilkovnaPlugin\Controller\SyncBranches

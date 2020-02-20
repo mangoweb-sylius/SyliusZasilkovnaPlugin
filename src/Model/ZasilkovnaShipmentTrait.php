@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace MangoSylius\SyliusZasilkovnaPlugin\Model;
 
 use Doctrine\ORM\Mapping as ORM;
-use MangoSylius\SyliusZasilkovnaPlugin\Entity\ZasilkovnaInterface;
 
 trait ZasilkovnaShipmentTrait
 {
 	/**
-	 * @var ZasilkovnaInterface|null
-	 * @ORM\ManyToOne(targetEntity="MangoSylius\SyliusZasilkovnaPlugin\Entity\Zasilkovna")
+	 * @var array|null
+	 *
+	 * @ORM\Column(type="json", nullable=true)
 	 */
 	private $zasilkovna;
 
-	public function getZasilkovna(): ?ZasilkovnaInterface
+	public function getZasilkovna(): ?array
 	{
 		return $this->zasilkovna;
 	}
 
-	public function setZasilkovna(?ZasilkovnaInterface $zasilkovna): void
+	public function setZasilkovna(?array $zasilkovna): void
 	{
 		$this->zasilkovna = $zasilkovna;
 	}

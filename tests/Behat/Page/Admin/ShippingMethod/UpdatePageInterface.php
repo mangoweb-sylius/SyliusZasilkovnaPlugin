@@ -17,7 +17,5 @@ interface UpdatePageInterface extends BaseUpdatePageInterface
 
 	public function zasilkovnaDownloadButtonIsOnPage(): NodeElement;
 
-	public function clickToZasilkovnaDownloadButton(): void;
-
 	public function iSeeZasilkovnaBranchInsteadOfShippingAddress(): bool;
 }

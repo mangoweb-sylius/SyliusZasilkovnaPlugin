@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace MangoSylius\SyliusZasilkovnaPlugin\Form\Extension;
 
-use Doctrine\ORM\EntityRepository;
-use MangoSylius\SyliusZasilkovnaPlugin\Entity\Zasilkovna;
 use MangoSylius\SyliusZasilkovnaPlugin\Model\ZasilkovnaShippingMethodInterface;
-use MangoSylius\SyliusZasilkovnaPlugin\Repository\ZasilkovnaRepositoryInterface;
 use Sylius\Bundle\CoreBundle\Form\Type\Checkout\ShipmentType;
-use Sylius\Component\Addressing\Model\ZoneInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Core\Model\ShippingMethodInterface;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Shipping\Resolver\ShippingMethodsResolverInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -31,10 +26,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 {
 	/**
-	 * @var RepositoryInterface
-	 */
-	private $zoneRepository;
-	/**
 	 * @var ShippingMethodsResolverInterface
 	 */
 	private $shippingMethodsResolver;
@@ -47,21 +38,13 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 	 * @var string[];
 	 */
 	private $zasilkovnaMethodsCodes = [];
-	/**
-	 * @var ZasilkovnaRepositoryInterface
-	 */
-	private $zasilkovnaRepository;
 
 	public function __construct(
-		RepositoryInterface $zoneRepository,
 		ShippingMethodsResolverInterface $shippingMethodsResolver,
-		ShippingMethodRepositoryInterface $shippingMethodRepository,
-		ZasilkovnaRepositoryInterface $zasilkovnaRepository
+		ShippingMethodRepositoryInterface $shippingMethodRepository
 	) {
-		$this->zoneRepository = $zoneRepository;
 		$this->shippingMethodsResolver = $shippingMethodsResolver;
 		$this->shippingMethodRepository = $shippingMethodRepository;
-		$this->zasilkovnaRepository = $zasilkovnaRepository;
 	}
 
 	public function buildForm(FormBuilderInterface $builder, array $options)
@@ -75,9 +58,12 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 				assert(array_key_exists('method', $orderData));
 
 				$orderData['zasilkovna'] = null;
-				if (array_key_exists('zasilkovna_' . $orderData['method'], $orderData) && in_array($orderData['method'], $this->zasilkovnaMethodsCodes, true)) {
-					$zasilkovnaId = (int) $orderData['zasilkovna_' . $orderData['method']];
-					$orderData['zasilkovna'] = $this->zasilkovnaRepository->find($zasilkovnaId);
+				if (
+					array_key_exists('zasilkovna_' . $orderData['method'], $orderData)
+					&& in_array($orderData['method'], $this->zasilkovnaMethodsCodes, true)
+					&& $orderData['zasilkovna_' . $orderData['method']] !== ''
+				) {
+					$orderData['zasilkovna'] = $orderData['zasilkovna_' . $orderData['method']];
 				}
 
 				$event->setData($orderData);
@@ -92,6 +78,8 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 					$shippingMethods = $this->shippingMethodRepository->findAll();
 				}
 
+				$selectedMethodCode = $shipment !== null && $shipment->getMethod() !== null ? $shipment->getMethod()->getCode() : null;
+
 				foreach ($shippingMethods as $method) {
 					assert($method instanceof ShippingMethodInterface);
 					assert($method instanceof ZasilkovnaShippingMethodInterface);
@@ -102,21 +90,25 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 						$zone = $method->getZone();
 						assert($zone !== null);
 
+						$data = null;
+						$dataLabel = null;
+						if ($selectedMethodCode !== null && $selectedMethodCode === $method->getCode() && $shipment->getZasilkovna() !== null) {
+							$data = json_encode($shipment->getZasilkovna());
+							$dataLabel = $this->getZasilkovnaName($shipment->getZasilkovna());
+						}
+
 						$this->zasilkovnaMethodsCodes[] = $method->getCode();
 						$form
-							->add('zasilkovna_' . $method->getCode(), EntityType::class, [
+							->add('zasilkovna_' . $method->getCode(), HiddenType::class, [
+								'attr' => [
+									'data-api-key' => $zasilkovnaConfig->getApiKey(),
+									'data-country' => $zasilkovnaConfig->getOptionCountry(),
+									'data-label' => $dataLabel,
+								],
+								'data' => $data,
 								'required' => false,
 								'mapped' => false,
 								'empty_data' => null,
-								'placeholder' => 'mangoweb.shop.checkout.shippingStep.chooseZasilkovnaBranch',
-								'class' => Zasilkovna::class,
-								'query_builder' => function (EntityRepository $er) use ($zone) {
-									return $er->createQueryBuilder('z')
-										->where('z.disabledAt IS NULL')
-										->andWhere('z.country in (:countries)')
-										->setParameter('countries', $this->getCountries($zone))
-										->orderBy('z.nameStreet');
-								},
 								'constraints' => [
 									new NotBlank([
 										'groups' => ['zasilkovna_' . $method->getCode()],
@@ -127,6 +119,36 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 					}
 				}
 			});
+
+		$builder
+			->get('zasilkovna')
+			->addModelTransformer(new CallbackTransformer(
+				function ($zasilkovnaAsArray) {
+					return null;
+				},
+				function ($zasilkovnaAsString) {
+					if ($zasilkovnaAsString === null) {
+						return null;
+					}
+
+					return json_decode($zasilkovnaAsString, true);
+				}
+			));
+	}
+
+	private function getZasilkovnaName(array $zasilkovna): string
+	{
+		$arrayName = [];
+		if (array_key_exists('place', $zasilkovna)) {
+			$arrayName[] = $zasilkovna['place'];
+		}
+		if (array_key_exists('nameStreet', $zasilkovna)) {
+			$arrayName[] = $zasilkovna['nameStreet'];
+		} elseif (array_key_exists('name', $zasilkovna)) {
+			$arrayName[] = $zasilkovna['name'];
+		}
+
+		return implode(', ', $arrayName);
 	}
 
 	public function configureOptions(OptionsResolver $resolver): void
@@ -161,30 +183,5 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 	public function getExtendedType()
 	{
 		return ShipmentType::class;
-	}
-
-	private function getZoneByCode(string $code): ZoneInterface
-	{
-		$zone = $this->zoneRepository->findOneBy(['code' => $code]);
-		assert($zone instanceof ZoneInterface);
-
-		return $zone;
-	}
-
-	private function getCountries(ZoneInterface $zone): array
-	{
-		$countries = [];
-		if ($zone->getType() === ZoneInterface::TYPE_COUNTRY) {
-			foreach ($zone->getMembers() as $countryMember) {
-				$countries[] = $countryMember->getCode();
-			}
-		} elseif ($zone->getType() === ZoneInterface::TYPE_ZONE) {
-			foreach ($zone->getMembers() as $zoneMember) {
-				assert($zoneMember->getCode() !== null);
-				$countries = array_merge($this->getCountries($this->getZoneByCode($zoneMember->getCode())));
-			}
-		}
-
-		return $countries;
 	}
 }
