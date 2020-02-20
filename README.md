@@ -177,6 +177,7 @@ For the guide how to use your own entity see [Sylius docs - Customizing Models](
 
 * For delivery to the Zasilkovna branch, create new shipping method in the admin panel, set `Zásilkovna api key` and leave `Carrier ID` empty.
 * For delivery to customer's address, create new shipping method in the admin panel, set the `Carrier ID` and leave the `Zasilkovna API key` empty.
+* If you need to filter the points in the map by country, use the `Show only pickup points from specific country in the map`. If you leave this blank, all points in all supported countries will be shown.
 * Zásilkovna CSV export will be generated for shipping method which has the code 'zasilkovna', you can change this in parameters, it is an array (therefore can contain more codes, e.g. if you need to have different prices for different countries, you will need more shipping methods; it is okay to use always the same API key) 
   ```yaml
   parameters:
