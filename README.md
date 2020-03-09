@@ -137,9 +137,9 @@
    {{ include('MangoSyliusZasilkovnaPlugin:Shop/Checkout/SelectShipping:_zasilkovnaChoice.html.twig') }}
     ```
    
-1. Replace `{% include '@SyliusShop/Common/_address.html.twig' with {'address': order.shippingAddress} %}` with `{{ include('MangoSyliusZasilkovnaPlugin:Shop/Common/Order:_zasilkovnaChoice.html.twig') }}` in `@SyliusShop/Common/Order/_addresses.html.twig`
+1. Replace `{% include '@SyliusShop/Common/_address.html.twig' with {'address': order.shippingAddress} %}` with `{{ include('MangoSyliusZasilkovnaPlugin:Shop/Common/Order:_addresses.html.twig') }}` in `@SyliusShop/Common/Order/_addresses.html.twig`
 
-1. Replace `{% include '@SyliusAdmin/Common/_address.html.twig' with {'address': order.shippingAddress} %}` with `{{ include('MangoSyliusZasilkovnaPlugin:Admin/Common/Order:_addresses.html.twig') }}` in `@SyliusAdmin/Common/Order/_addresses.html.twig`
+1. Replace `{% include '@SyliusAdmin/Common/_address.html.twig' with {'address': order.shippingAddress} %}` with `{{ include('MangoSyliusZasilkovnaPlugin:Admin/Common/Order:_addresses.html.twig') }}` in `@SyliusAdmin/Order/Show/_addresses.html.twig`
 
 1. Override the template in `MangoSyliusShipmentExportPlugin::_row.html.twig`
     ```twig
