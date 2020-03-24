@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v2.1 (2020-xx-xx)
+## v2.1 (2020-03-25)
 
 #### Details
 
