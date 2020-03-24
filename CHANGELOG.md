@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v2.1 (2020-xx-xx)
+
+#### Details
+
+- Update to Sylius ^1.7, PHP ^7.3
+
 ## v2.0 (2020-02-20)
 
 #### Details

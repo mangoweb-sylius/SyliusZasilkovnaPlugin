@@ -19,7 +19,7 @@ Feature: Select Zásilkovna branch in checkout
 	@ui
 	Scenario: Complete order with non Zásilkovna shipping method
 		Given I have product "PHP T-Shirt" in the cart
-		And I specified the shipping address as "Ankh Morpork", "Frost Alley", "90210", "Czechia" for "Jon Snow"
+		And I specified the billing address as "Ankh Morpork", "Frost Alley", "90210", "Czechia" for "Jon Snow"
 		And I select "DHL" shipping method
 		And I complete the shipping step
 		And I select "CSOB" payment method
@@ -31,14 +31,14 @@ Feature: Select Zásilkovna branch in checkout
 	@ui
 	Scenario: Unable to complete shipping step with Zásilkovna shipping methods without selecting the Zásilkovna branch
 		Given I have product "PHP T-Shirt" in the cart
-		And I specified the shipping address as "Ankh Morpork", "Frost Alley", "90210", "Czechia" for "Jon Snow"
+		And I specified the billing address as "Ankh Morpork", "Frost Alley", "90210", "Czechia" for "Jon Snow"
 		When I select "Zasilkovna" shipping method
 		Then I should not be able to go to the payment step again
 
 	@ui
 	Scenario: Complete order with Zásilkovna shipping method
 		Given I have product "PHP T-Shirt" in the cart
-		And I specified the shipping address as "Ankh Morpork", "Frost Alley", "90210", "Czechia" for "Jon Snow"
+		And I specified the billing address as "Ankh Morpork", "Frost Alley", "90210", "Czechia" for "Jon Snow"
 		And I select "Zasilkovna" shipping method
 		And I select "ZasilkovnaCZ" Zásilkovna branch
 		And I complete the shipping step

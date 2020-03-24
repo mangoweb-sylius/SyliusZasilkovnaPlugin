@@ -12,13 +12,10 @@ use Webmozart\Assert\Assert;
 
 final class ManagingZasilkovnaContext implements Context
 {
-	/**
-	 * @var ZasilkovnaPagesInterface
-	 */
+	/** @var ZasilkovnaPagesInterface */
 	private $zasilkovnaPages;
-	/**
-	 * @var CheckoutShippingContext
-	 */
+
+	/** @var CheckoutShippingContext */
 	private $checkoutShippingContext;
 
 	public function __construct(

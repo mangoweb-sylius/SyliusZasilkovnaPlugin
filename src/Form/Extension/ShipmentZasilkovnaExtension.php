@@ -20,23 +20,15 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-/**
- * @method iterable getExtendedTypes()
- */
 class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 {
-	/**
-	 * @var ShippingMethodsResolverInterface
-	 */
+	/** @var ShippingMethodsResolverInterface */
 	private $shippingMethodsResolver;
-	/**
-	 * @var ShippingMethodRepositoryInterface
-	 */
+
+	/** @var ShippingMethodRepositoryInterface */
 	private $shippingMethodRepository;
 
-	/**
-	 * @var string[];
-	 */
+	/** @var string[]; */
 	private $zasilkovnaMethodsCodes = [];
 
 	public function __construct(
@@ -47,7 +39,8 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 		$this->shippingMethodRepository = $shippingMethodRepository;
 	}
 
-	public function buildForm(FormBuilderInterface $builder, array $options)
+	/** @param array<mixed> $options */
+	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder
 			->add('zasilkovna', HiddenType::class)
@@ -136,6 +129,9 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 			));
 	}
 
+	/**
+	 * @param array<mixed> $zasilkovna
+	 */
 	private function getZasilkovnaName(array $zasilkovna): string
 	{
 		$arrayName = [];
@@ -177,11 +173,11 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 		]);
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getExtendedType()
+	/** @return array<string> */
+	public static function getExtendedTypes(): array
 	{
-		return ShipmentType::class;
+		return [
+			ShipmentType::class,
+		];
 	}
 }
