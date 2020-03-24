@@ -15,13 +15,10 @@ use Sylius\Component\Core\Model\ShippingMethodInterface;
 
 final class ShippingMethodContext implements Context
 {
-	/**
-	 * @var EntityManagerInterface
-	 */
+	/** @var EntityManagerInterface */
 	private $entityManager;
-	/**
-	 * @var SharedStorageInterface
-	 */
+
+	/** @var SharedStorageInterface */
 	private $sharedStorage;
 
 	public function __construct(

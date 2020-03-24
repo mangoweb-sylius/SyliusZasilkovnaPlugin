@@ -11,13 +11,10 @@ use Webmozart\Assert\Assert;
 
 final class ManagingShippingMethodContext implements Context
 {
-	/**
-	 * @var UpdatePageInterface
-	 */
+	/** @var UpdatePageInterface */
 	private $updatePage;
-	/**
-	 * @var NotificationCheckerInterface
-	 */
+
+	/** @var NotificationCheckerInterface */
 	private $notificationChecker;
 
 	public function __construct(

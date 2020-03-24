@@ -11,9 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 final class ZasilkovnaConfigType extends AbstractResourceType
 {
-	/**
-	 * @var array
-	 */
+	/** @var array */
 	private $countryChoices;
 
 	public function __construct(

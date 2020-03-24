@@ -9,9 +9,6 @@ use Sylius\Bundle\ShippingBundle\Form\Type\ShippingMethodType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 
-/**
- * @method iterable getExtendedTypes()
- */
 class AdminZasilkovnaShippingMethodExtension extends AbstractTypeExtension
 {
 	public function buildForm(FormBuilderInterface $builder, array $options)
@@ -19,11 +16,11 @@ class AdminZasilkovnaShippingMethodExtension extends AbstractTypeExtension
 		$builder->add('zasilkovnaConfig', ZasilkovnaConfigType::class);
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getExtendedType()
+	/** @return array<string> */
+	public static function getExtendedTypes(): array
 	{
-		return ShippingMethodType::class;
+		return [
+			ShippingMethodType::class,
+		];
 	}
 }

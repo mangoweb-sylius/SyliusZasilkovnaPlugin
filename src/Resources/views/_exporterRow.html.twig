@@ -1,0 +1,9 @@
+{% if row.zasilkovna %}
+	Zásilkovna:
+	{{ row.zasilkovna['place'] is defined ? row.zasilkovna['place'] }},
+	{% if row.zasilkovna['nameStreet'] is defined %}
+		{{ row.zasilkovna['nameStreet'] }}
+	{% elseif row.zasilkovna['name'] is defined %}
+		{{ row.zasilkovna['name'] }}
+	{% endif %}
+{% endif %}

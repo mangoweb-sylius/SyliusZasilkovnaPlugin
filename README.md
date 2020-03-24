@@ -121,51 +121,34 @@
    }
    ```
 
-1. Include `MangoSyliusZasilkovnaPlugin:Admin/ShippingMethod:_zasilkovnaForm.html.twig` into `@SyliusAdmin/ShippingMethod/_form.html.twig`.
+1. Include `@MangoSyliusZasilkovnaPlugin/Admin/ShippingMethod/:zasilkovnaForm.html.twig` into `@SyliusAdmin/ShippingMethod/_form.html.twig`.
  
     ```twig
     ...	
-   {{ include('MangoSyliusZasilkovnaPlugin:Admin/ShippingMethod:_zasilkovnaForm.html.twig') }}
-    ...
+   {{ include('@MangoSyliusZasilkovnaPlugin/Admin/ShippingMethod/_zasilkovnaForm.html.twig') }}
     ```
    
-1. Include `MangoSyliusZasilkovnaPlugin:Shop/Checkout/SelectShipping:_zasilkovnaChoice.html.twig` into `@SyliusShop/Checkout/SelectShipping/_choice.html.twig`.
+1. Include `@MangoSyliusZasilkovnaPlugin/Shop/Checkout/SelectShipping/_zasilkovnaChoice.html.twig` into `@SyliusShop/Checkout/SelectShipping/_choice.html.twig`.
  
     ```twig
     ...
-    ...
-   {{ include('MangoSyliusZasilkovnaPlugin:Shop/Checkout/SelectShipping:_zasilkovnaChoice.html.twig') }}
+   {{ include('@MangoSyliusZasilkovnaPlugin/Shop/Checkout/SelectShipping/_zasilkovnaChoice.html.twig') }}
     ```
    
-1. Replace `{% include '@SyliusShop/Common/_address.html.twig' with {'address': order.shippingAddress} %}` with `{{ include('MangoSyliusZasilkovnaPlugin:Shop/Common/Order:_addresses.html.twig') }}` in `@SyliusShop/Common/Order/_addresses.html.twig`
+1. Replace `{% include '@SyliusShop/Common/_address.html.twig' with {'address': order.shippingAddress} %}` with `{{ include('@MangoSyliusZasilkovnaPlugin/Shop/Common/Order/_addresses.html.twig') }}` in `@SyliusShop/Common/Order/_addresses.html.twig`
 
-1. Replace `{% include '@SyliusAdmin/Common/_address.html.twig' with {'address': order.shippingAddress} %}` with `{{ include('MangoSyliusZasilkovnaPlugin:Admin/Common/Order:_addresses.html.twig') }}` in `@SyliusAdmin/Order/Show/_addresses.html.twig`
+1. Replace `{% include '@SyliusAdmin/Common/_address.html.twig' with {'address': order.shippingAddress} %}` with `{{ include('@MangoSyliusZasilkovnaPlugin/Admin/Common/Order/_addresses.html.twig') }}` in `@SyliusAdmin/Order/Show/_addresses.html.twig`
 
-1. Override the template in `MangoSyliusShipmentExportPlugin::_row.html.twig`
+1. Override the template in `@MangoSyliusShipmentExportPlugin/_row.html.twig`
     ```twig
-   {% extends 'MangoSyliusShipmentExportPlugin::_row.html.twig' %}
+   {% extends '@MangoSyliusShipmentExportPlugin/_row.html.twig' %}
    
    {% block address %}
-   	{% if row.zasilkovna %}
-   		Zásilkovna:
-        {{ row.zasilkovna['place'] is defined ? row.zasilkovna['place'] }},
-        {% if row.zasilkovna['nameStreet'] is defined %}
-        	{{ row.zasilkovna['nameStreet'] }}
-        {% elseif row.zasilkovna['name'] is defined %}
-        	{{ row.zasilkovna['name'] }}
-        {% endif %}
-   	{% else %}
-   		{{ 'mangoweb.admin.zasilkovna.export.toAddress'|trans }}:
-   		{% if row.order.shippingAddress.company %}
-   			{{ row.order.shippingAddress.company }},
-   		{% endif %}
-   		{{ row.order.shippingAddress.firstName }}
-   		{{ row.order.shippingAddress.lastName }},
-   		{{ row.order.shippingAddress.street }},
-   		{{ row.order.shippingAddress.postcode }}
-   		{{ row.order.shippingAddress.city }},
-   		{{ row.order.shippingAddress.countryCode }}
-   	{% endif %}
+       {% if row.zasilkovna %}
+            {{ include('@MangoSyliusZasilkovnaPlugin/_exporterRow.html.twig') }}
+       {% else %}
+           {{ parent() }}
+       {% endif %}
    {% endblock %}
     ```
    

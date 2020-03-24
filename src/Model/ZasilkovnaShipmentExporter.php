@@ -13,14 +13,10 @@ use Sylius\Component\Currency\Converter\CurrencyConverter;
 
 class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 {
-	/**
-	 * @var string[]
-	 */
+	/** @var string[] */
 	private $shippingMethodsCodes;
 
-	/**
-	 * @var CurrencyConverter
-	 */
+	/** @var CurrencyConverter */
 	private $currencyConverter;
 
 	public function __construct(
