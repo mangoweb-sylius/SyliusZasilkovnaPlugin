@@ -141,7 +141,7 @@
 
 1. Override the template in `@MangoSyliusShipmentExportPlugin/_row.html.twig`
     ```twig
-   {% extends '@MangoSyliusShipmentExportPlugin/_row.html.twig' %}
+   {% extends '@!MangoSyliusShipmentExportPlugin/_row.html.twig' %}
    
    {% block address %}
        {% if row.zasilkovna %}
