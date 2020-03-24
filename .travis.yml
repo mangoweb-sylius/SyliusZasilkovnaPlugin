@@ -1,8 +1,6 @@
 language: php
-
+os: linux
 dist: trusty
-
-sudo: false
 
 cache:
     yarn: true
@@ -17,7 +15,7 @@ env:
         - SYLIUS_CACHE_DIR=$HOME/.sylius-cache
         - SYLIUS_BUILD_DIR=etc/build
 
-matrix:
+jobs:
     include:
         -
             php: 7.3
