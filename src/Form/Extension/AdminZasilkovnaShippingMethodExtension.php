@@ -11,7 +11,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class AdminZasilkovnaShippingMethodExtension extends AbstractTypeExtension
 {
-	public function buildForm(FormBuilderInterface $builder, array $options)
+	/** @param array<mixed> $options */
+	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder->add('zasilkovnaConfig', ZasilkovnaConfigType::class);
 	}

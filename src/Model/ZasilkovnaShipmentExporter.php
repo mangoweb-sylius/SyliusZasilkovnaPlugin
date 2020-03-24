@@ -13,12 +13,15 @@ use Sylius\Component\Currency\Converter\CurrencyConverter;
 
 class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 {
-	/** @var string[] */
+	/** @var array<string> */
 	private $shippingMethodsCodes;
 
 	/** @var CurrencyConverter */
 	private $currencyConverter;
 
+	/**
+	 * @param array<string> $shippingMethodsCodes
+	 */
 	public function __construct(
 		CurrencyConverter $currencyConverter,
 		array $shippingMethodsCodes
@@ -32,11 +35,19 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 		return $this->currencyConverter->convert($amount, $sourceCurrencyCode, $targetCurrencyCode);
 	}
 
+	/**
+	 * @return array<string>
+	 */
 	public function getShippingMethodsCodes(): array
 	{
 		return $this->shippingMethodsCodes;
 	}
 
+	/**
+	 * @param array<mixed> $questionsArray
+	 *
+	 * @return array<mixed>
+	 */
 	public function getRow(ShipmentInterface $shipment, array $questionsArray): array
 	{
 		assert($shipment instanceof ZasilkovnaShipmentInterface);
@@ -193,11 +204,17 @@ class ZasilkovnaShipmentExporter implements ShipmentExporterInterface
 		return ',';
 	}
 
+	/**
+	 * @return array<mixed>|null
+	 */
 	public function getQuestionsArray(): ?array
 	{
 		return null;
 	}
 
+	/**
+	 * @return array<array<string>>|null
+	 */
 	public function getHeaders(): ?array
 	{
 		return [

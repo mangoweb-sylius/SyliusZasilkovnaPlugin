@@ -39,7 +39,8 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 		$this->shippingMethodRepository = $shippingMethodRepository;
 	}
 
-	public function buildForm(FormBuilderInterface $builder, array $options)
+	/** @param array<mixed> $options */
+	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder
 			->add('zasilkovna', HiddenType::class)
@@ -128,6 +129,9 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 			));
 	}
 
+	/**
+	 * @param array<mixed> $zasilkovna
+	 */
 	private function getZasilkovnaName(array $zasilkovna): string
 	{
 		$arrayName = [];
