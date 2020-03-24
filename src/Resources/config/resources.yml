@@ -1,3 +1,11 @@
+sylius_ui:
+    events:
+        sylius.shop.layout.javascripts:
+            blocks:
+                mango_sylius.sylius_zasilkovna_plugin.shop.layout.javascripts:
+                    template: "@MangoSyliusZasilkovnaPlugin/Shop/_javascripts.html.twig"
+                    priority: 5
+
 sylius_resource:
     resources:
         mango_zasilkovna_plugin.zasilkovna_config:

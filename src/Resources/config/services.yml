@@ -38,12 +38,3 @@ services:
             - name: mango_sylius.shipment_exporter_type
               type: 'zasilkovna'
               label: 'Zásilkovna'
-
-    mango_sylius.sylius_zasilkovna_plugin.block_event_listener.shop.layout.javascripts:
-        class: Sylius\Bundle\UiBundle\Block\BlockEventListener
-        arguments:
-            - '@@MangoSyliusZasilkovnaPlugin/Shop/_javascripts.html.twig'
-        tags:
-            -   event: sonata.block.event.sylius.shop.layout.javascripts
-                method: onBlockEvent
-                name: kernel.event_listener
