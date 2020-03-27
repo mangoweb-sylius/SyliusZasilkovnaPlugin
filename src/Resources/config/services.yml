@@ -12,6 +12,7 @@ services:
         arguments:
             - '@sylius.shipping_methods_resolver'
             - '@sylius.repository.shipping_method'
+            - '@translator'
         tags:
             - name: form.type_extension
               extended_type: Sylius\Bundle\CoreBundle\Form\Type\Checkout\ShipmentType

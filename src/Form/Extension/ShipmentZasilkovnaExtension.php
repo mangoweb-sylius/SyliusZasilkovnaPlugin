@@ -6,7 +6,6 @@ namespace MangoSylius\SyliusZasilkovnaPlugin\Form\Extension;
 
 use MangoSylius\SyliusZasilkovnaPlugin\Model\ZasilkovnaShippingMethodInterface;
 use Sylius\Bundle\CoreBundle\Form\Type\Checkout\ShipmentType;
-use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Core\Model\ShippingMethodInterface;
 use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use Sylius\Component\Shipping\Resolver\ShippingMethodsResolverInterface;
@@ -14,11 +13,10 @@ use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 {
@@ -31,12 +29,17 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 	/** @var string[]; */
 	private $zasilkovnaMethodsCodes = [];
 
+	/** @var TranslatorInterface */
+	private $translator;
+
 	public function __construct(
 		ShippingMethodsResolverInterface $shippingMethodsResolver,
-		ShippingMethodRepositoryInterface $shippingMethodRepository
+		ShippingMethodRepositoryInterface $shippingMethodRepository,
+		TranslatorInterface $translator
 	) {
 		$this->shippingMethodsResolver = $shippingMethodsResolver;
 		$this->shippingMethodRepository = $shippingMethodRepository;
+		$this->translator = $translator;
 	}
 
 	/** @param array<mixed> $options */
@@ -60,6 +63,12 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 				}
 
 				$event->setData($orderData);
+
+				// validation
+				$data = $event->getData();
+				if (array_key_exists('zasilkovna_' . $data['method'], $data) && !((bool) $orderData['zasilkovna_' . $orderData['method']])) {
+					$event->getForm()->addError(new FormError($this->translator->trans('mangoweb.shop.checkout.zasilkovnaBranch', [], 'validators')));
+				}
 			})
 			->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
 				$form = $event->getForm();
@@ -102,12 +111,6 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 								'required' => false,
 								'mapped' => false,
 								'empty_data' => null,
-								'constraints' => [
-									new NotBlank([
-										'groups' => ['zasilkovna_' . $method->getCode()],
-										'message' => 'mangoweb.shop.checkout.zasilkovnaBranch',
-									]),
-								],
 							]);
 					}
 				}
@@ -145,32 +148,6 @@ class ShipmentZasilkovnaExtension extends AbstractTypeExtension
 		}
 
 		return implode(', ', $arrayName);
-	}
-
-	public function configureOptions(OptionsResolver $resolver): void
-	{
-		parent::configureOptions($resolver);
-
-		$validationGroups = $resolver->resolve()['validation_groups'];
-
-		$resolver->setDefaults([
-			'validation_groups' => function (FormInterface $form) use ($validationGroups) {
-				$entity = $form->getData();
-				assert($entity instanceof ShipmentInterface);
-
-				$shippingMethod = $entity->getMethod();
-
-				if ($shippingMethod !== null) {
-					assert($shippingMethod instanceof ZasilkovnaShippingMethodInterface);
-					$zasilkovnaConfig = $shippingMethod->getZasilkovnaConfig();
-					if ($zasilkovnaConfig && $zasilkovnaConfig->getApiKey()) {
-						$validationGroups = array_merge($validationGroups ?? [], ['zasilkovna_' . $shippingMethod->getCode()]);
-					}
-				}
-
-				return $validationGroups;
-			},
-		]);
 	}
 
 	/** @return array<string> */
