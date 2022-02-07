@@ -1,0 +1,21 @@
+mangoweb:
+    shop:
+        checkout:
+            complete:
+                zasilkovnaBrach: Packeta átvevőhely
+            shippingStep:
+                chooseZasilkovnaBranch: Válasszon Packeta Átvevőhelyet
+    admin:
+        zasilkovna:
+            title: Packeta
+            success:
+                import: Packeta átvevőhely szinkronizáció sikeres.
+            form:
+                optionCountry: Csak az adott ország átveveőhelyeit mutassa a térképen. (Hagyja üresen, ha mindet mutassa)
+                apiKey: Packeta api kulcs
+                senderLabel: Feladó cimke
+                carrierId: Feladó ID
+                syncAction: Packeta átvevőhely szinkronizálása
+            export:
+                toZasilkovnaBranch: Packeta Átvevőhely
+                toAddress: Címzett
